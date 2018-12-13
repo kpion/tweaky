@@ -1,0 +1,406 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+:root{
+  --header-height: 4.5em;
+  
+  --eval-toolbar-height: 2.5em;  
+
+
+  /*
+  --background-color: #1C1D22;
+  --color: #fff;
+  */
+}
+
+.theme-light{
+  --background-color: #fff;
+  --color: #333;
+  --color-2: #666;  /* less contrast */
+  --section-border-color: #dadada;
+  --section-border:1px solid var(--section-border-color);
+}
+
+.theme-dark{
+  --background-color: #1C1D22;
+  --color: #fff;
+  --color-2: #ccc;  /* less contrast */
+  --section-border-color: #2d333b;
+  --section-border:1px solid var(--section-border-color);
+}
+
+html{
+  height: 100%;
+}
+
+body {
+  min-height:100%;
+  margin: 0;
+  line-height: 1.5;  
+  background-color :var(--background-color);
+  color:var(--color);
+	font-family: sans-serif; 
+  
+  
+  
+  
+}
+
+/*
+-------------------------------------------------------------------------------
+common elements
+-------------------------------------------------------------------------------
+*/
+
+.button{
+  border: 0;
+  padding: .5em 1em;
+  color: rgba(0,0,0,.8);
+  background-color: #E6E6E6;
+  border-radius: 2px;
+  cursor: pointer;
+  background-image: none;
+  transition: .3s ease-out;
+}
+
+.button-primary{
+  background-color: #0078e7;
+  color:white;
+}
+
+.button:hover{
+  opacity:0.7;
+}
+
+input[type=checkbox]{
+  vertical-align:middle;
+}
+
+label{
+  font-size:0.7em;
+  color:var(--color-2);
+}
+
+h1,h2,h3{
+  font-weight: 400;
+  color: #222;
+  line-height: normal;
+  margin: 0.2em 0;
+}
+
+a,a:visited{
+  text-decoration: none;
+  color:#2FACFF; 
+}
+
+/*
+-------------------------------------------------------------------------------
+header
+-------------------------------------------------------------------------------
+*/
+
+header{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;  
+  background-color:black; 
+  color:white;
+  padding: 0px 0 0px 0;
+  height: var(--header-height); 
+  transition: background-image 5s;
+}
+
+body.theme-dark header{
+  background: radial-gradient(circle at center, #333, #333 50%, #000);
+  background-size: 100%;
+  background-repeat: no-repeat;  
+
+}
+
+/* h1 and everything wrapper */
+header .container{
+  
+  /* max-width: 30em; */
+  /* margin: 0 auto; */
+}
+
+header h1{
+  line-height: 0.7;  
+  margin-top: 0;
+  position:relative;
+  font-weight: 200;
+  margin-bottom: 0.825rem;
+  letter-spacing: 12px;
+  display: inline-block;
+}
+
+
+header h1 .line-main{
+  font-weight: 700;
+  
+  color:#999;
+  
+  /* font-size: 2.6rem; */
+  font-size: 1.5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;  
+  filter:blur(10px);
+  transition: 1.5s;
+}
+
+/* body gets the .loaded class on document ready, so at the very start */
+
+body.loaded header h1 .line-main{
+  /* font-size: 2.4rem;  */
+  color:#fff;
+  filter:blur(0)
+}
+
+header h1 .line-extra{
+  color:#fff;
+  /* font-size: 1.6rem; */
+  font-size: 0.8rem;
+  transition: 1.5s;
+  letter-spacing: 4px;
+}
+
+
+/* body gets the .loaded class on document ready, so at the very start */
+
+body.loaded header h1 .line-extra {
+  color:#ccc;
+}
+
+
+/* image logo */
+
+header .gh-link{
+  position:relative;
+  top:3px;
+  left:-200px;
+  transition:all 0.5s ease-in;
+  display:inline-block;
+  
+}
+
+body.loaded header .gh-link{
+  opacity: 1;  
+  left:-20px; /* compensating a space */
+ 
+}
+
+header .gh-link img{
+  width:24px;
+  opacity:0.9;  
+  display: block;
+  
+}
+
+header .gh-link img:hover{
+  opacity:1;  
+}
+
+
+
+
+/* 
+-------------------------------------------------------------------------------
+main
+-------------------------------------------------------------------------------
+*/
+
+main {
+  margin: 0 auto;
+  width:calc(100% - 20px);
+  /* i have no idea why this -10px is needed here, but it is, otherwise the panels takes more than 100% in total o.O */
+  height: calc(100vh - var(--header-height) - 20px);
+}
+
+
+/*
+-------------------------------------------------------------------------------
+editor and output panels
+-------------------------------------------------------------------------------
+*/
+
+
+
+/* ------------- editor ---------- */
+/* 
+#code {
+  
+} */
+
+
+#code .toolbar{
+  height: var(--eval-toolbar-height)  ;
+  margin-top:10px;
+}
+
+/* for #run-indicator #run-result-stats etc*/
+.run-item{
+  display:inline-block;
+  width:6em;
+  font-size:0.7em;
+  color: var(--color-2);
+  margin-left:2px;
+}
+
+#run-indicator, #run-result-stats{
+  opacity:0;
+  transition: all 0.5s; 
+}
+
+#run-indicator.visible, #run-result-stats.visible{
+  opacity:1;
+}
+
+#editor-container{
+  position: relative;
+  width:100%;
+  height: calc(100% - var(--eval-toolbar-height));
+  
+  
+  margin-bottom:1em;
+  resize: vertical;
+  overflow: hidden;  
+  /* border: 2px solid blue; */
+  border:var(--section-border);
+  border-bottom: none;/* there is 'split' a gutter */
+}
+
+#editor{
+  width:100%;
+  /* height:calc(100% - 10px); */
+  height:100%;
+  position: absolute;
+  
+}
+
+
+/* ------------- output and output panels  ------ */
+/*
+structure: 
+main
+ div #code...
+
+ div #outputs 
+    div .panels
+        div .panels.panel-left
+          .panel-toolbar
+          #output-raw
+        div .panels.panel-right
+          .panel-toolbar
+          #output-iframe
+*/
+
+#outputs{
+  /* doesn't matter, it's calculated with js anyway */
+  height:50%;
+}
+
+.panels {
+  display:flex;
+  /* height: 60vh; */
+  height:100%;
+}
+
+.panels .panel{
+  margin: 0;
+  overflow: auto;
+  
+}
+
+.panels .panel-left
+{
+  /* resize: horizontal; */
+  width:50%;
+  /* background-color:#efe; */
+}
+
+.panels  .panel-right
+{
+  flex:1; 
+  /* margin-left:10px; */
+  /* background-color:#eef; */
+}
+
+/* .panels .panel-horizontal-split{
+  width:3px;
+  background-color:#aaa;
+} */
+
+.panels {
+  --toolbar-height: 2em;
+}
+
+
+.panel-toolbar {
+  height:var(--toolbar-height);
+  padding:0;
+  margin:0;
+  padding-left:10px;
+
+  /* border:1px solid orange; */
+}
+
+
+#output-iframe{
+  width:100%;
+  background-color:white;
+  height: calc(100% - var(--toolbar-height));
+  margin:0;
+  padding:0px;
+  display:block;
+  border:var(--section-border);
+  border-right: none;/* there is 'split' a gutter */
+  /* border:none; */
+
+  overflow:auto;
+}
+
+
+#output-raw{
+  
+  width:100%;
+  height: calc(100% - var(--toolbar-height));
+  padding:5px;
+  margin:0;
+  border:var(--section-border);
+  border-left: none;/* there is 'split' a gutter */
+  font-family: 'Courier New', Courier, monospace;
+  color:var(--color);
+
+  overflow:auto;
+}
+
+.output-raw-wrapped{
+  white-space: pre-wrap;  
+  word-wrap: break-word;  
+}
+
+
+/*
+-------------------------------------------------------------------------------
+splitjs gutters.
+-------------------------------------------------------------------------------
+*/
+.gutter {
+  background-color: var(--section-border-color);
+
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.gutter.gutter-horizontal {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
+  cursor: col-resize;
+  height:100%;
+}
+
+.gutter.gutter-vertical {
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFAQMAAABo7865AAAABlBMVEVHcEzMzMzyAv2sAAAAAXRSTlMAQObYZgAAABBJREFUeF5jOAMEEAIEEFwAn3kMwcB6I2AAAAAASUVORK5CYII=');
+  cursor: row-resize;
+}    
+

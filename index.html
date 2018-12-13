@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='UTF-8'>
+        <title>Tweaky</title>
+        <link rel = 'stylesheet' type='text/css' href='res/css/main.css'>
+
+        <script src = 'lib/lightdom.js'></script>
+        <script src = 'lib/config.js'></script>
+        
+        <script src = 'lib/split.min.js'></script>
+        <script src = 'lib/ace/ace.js'></script>
+        <script src = "lib/ace/ext-language_tools.js"></script>
+
+        <script src = 'app/app.js'></script>
+        <script src = 'app/demo.js'></script>
+        
+
+    </head>
+    <body class = 'theme-dark'>
+        <header>
+            <div class = 'container'>
+                <h1>
+                    <span class = 'line-main'>Tweaky</span>
+                    <a class = 'gh-link' href = 'https://github/kpion/tweaky' title = '{source code}'>
+                        <img src = 'res/images/github-white-128.png'>
+                    </a>
+                    <br>
+                    <span class = 'line-extra'>
+                        <span>Local playground</span>
+                </h1>
+
+
+            </div>
+        </header>
+        
+
+        <main>
+            <div id = 'code' ><!-- everything related to code including toolbar and editor-->
+                <!-- <label title = 'Code, Alt+C'><b><u>C</u>ode:</b></label> -->
+                <div class = 'toolbar'>
+                    <button id = 'eval' class = 'button button-primary' title = 'Ctrl + Enter' accesskey = "r">
+                        RUN
+                    </button>
+                    
+                    <label class = 'run-item' for = 'auto-eval' title = 'Auto evaluate on change, Alt+A' accesskey= "a">
+                        <input type = 'checkbox' id  = 'auto-eval'><u>A</u>uto
+                    </label>
+                    <span class = 'run-item' id = 'run-result-stats'></span>
+                    <span class = 'run-item' id = 'run-indicator'></span>
+                    
+
+                </div>
+                <div id = 'editor-container'>
+                    <div id = 'editor' accesskey = "c"></div> 
+                </div>
+
+                
+            </div>                
+            
+            <div id = 'outputs'><!-- everything related to outputs including toolbar and panels-->
+                <div class = 'panels'>
+
+                    <div class = 'panel panel-left'>
+                        
+
+                        <div class = 'panel-toolbar'>
+                                <label><b>HTML output</b></label>
+                        </div>    
+                        <iframe id = 'output-iframe'></iframe>
+
+                            
+                    </div>    
+
+                    <!-- <div class = 'panel panel-horizontal-split' draggable="true"></div> -->
+
+                    <div class = 'panel panel-right'>
+                        <div class = 'panel-toolbar'>
+                            <label><b>Raw output</b></label>
+                            <label for = 'raw-output-wrap' title = 'Wrap raw output, Alt + W' accesskey = "w">
+                                <input type = 'checkbox' id  = 'raw-output-wrap'><u>W</u>rap
+                            </label>
+                        </div>
+                        <pre id = 'output-raw'></pre>                        
+                    </div>
+
+                    <div style = 'clear:both'></div>
+                </div>
+            </div>                
+        </main>
+    </body>
+</html>
+
