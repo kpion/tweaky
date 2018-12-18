@@ -6,7 +6,24 @@
 
 ## Installation
 
-No dependencies (except of course having PHP already installed), so just download this repo to some location on your local webserver, and then visit it with your browser.
+No dependencies (except of course having PHP already installed), so just download this repo to some location on your local webserver, and then visit it with your browser. Or:
+
+```bash
+cd /var/www/html ## just an example
+git clone https://github.com/kpion/tweaky.git
+```
+
+And then open your browser and visit e.g.  http://localhost/tweaky
+
+## ToDo
+
+ - "Opening" whole directories, i.e. just listing their contents and enabling users to click the files inside to edit them.
+
+ - Maybe add more server side languages, as an option.
+
+ - Add more kitties to the demo, ppl love kitties.
+
+ - Find some research confirming point #2. It sounds a bit silly.
 
 ## Credits
 
