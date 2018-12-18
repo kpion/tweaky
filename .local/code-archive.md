@@ -36,7 +36,35 @@ body.loaded .fade-out-rot{
   width:0px;
   
 }
+## animated header img logo
 
+/* image logo */
+
+header .gh-link{
+  position:relative;
+  top:3px;
+  left:-200px;
+  transition:all 0.5s ease-in;
+  display:inline-block;
+  
+}
+
+body.loaded header .gh-link{
+  opacity: 1;  
+  left:-20px; /* compensating a space */
+ 
+}
+
+header .gh-link img{
+  width:24px;
+  opacity:0.9;  
+  display: block;
+  
+}
+
+header .gh-link img:hover{
+  opacity:1;  
+}
 ## spinner
  
 /*

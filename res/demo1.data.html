@@ -1,25 +1,27 @@
 ¤# 
 
-it's just a demo which will be played when press ctrl+f7 - just for fun. And to make a gif.
+it's just a demo code which will be played when press ctrl+f7 - just for fun. And to make a gif.
 
-Stuff inside the 'currency symbols' are meta characters (commands) for the demo:) 
+Stuff inside the 'currency symbols' - are meta characters (commands) for the demo:) 
 
 #¤
-¤s4¤
-<h1>Run It</h1>
-<p>A way to quickly experiment with PHP on <b>your</b> server <b>in a browser</b>.</p>
-¤s7¤
-<?php 
-    $animals = ['Dog','Cat','Gobi Jerboa'];
-    array_walk($animals, function($item){?>
-        <div><?=$item?></div>
-    <?php })
-?>
-¤s5¤<style>
-    body{
-        color: #eee;
-        background-image: url('http://placekitten.com/600/300');
-        background-size:cover;
+¤s11¤
+<h1>Tweaky. Local, browser based editor.</h1>¤p0.5¤
+<p>Tinker with a new¤cr¤ prototype or demo,¤cr¤ using PHP &amp; HTML stack on¤cr¤ <strong>your server</strong>,¤p0.5¤
+in a browser,¤cr¤ with live preview.¤cr¤ Just like here:)</p>¤p0.8¤
+¤s12¤
+<?php
+foreach (glob("/var/www/html/serious-project/*.jpg") as $fpath) {?>
+    <img src = '//localhost/serious-project/<?= pathinfo($fpath, PATHINFO_BASENAME); ?>'>
+<?php } ?>¤p1.5¤
+<!-- and of course...-->¤p0.8¤
+<img src = '//localhost/serious-project/emergency/in-case-a-cat-is-needed/cat-astronaut.jpg'>¤p0.8¤
+
+<style>
+    @import '//localhost/serious-project/my-cool-style.css';¤p0.8¤
+    img{
+        border:2px dotted #333;¤p0.8¤
     }
 </style>¤p2¤
-<p>And you can add any kitty you want!!!</p>
+<p>And you can use any kitty you want!!! There are plenty of them in space! Not that it makes any sense :)</p>¤p0.8¤ 
+<!-- That's all folks! ->

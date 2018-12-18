@@ -4,11 +4,13 @@
 l(function(){
    
     const serviceUrl = 'app/service.php';
+    const header =  l('header');
 
     const codeEditorContainter = l('#code #editor-container');
     
     const autoEval = l('#auto-eval');
-
+    const runToolbar = l('#code #toolbar');
+    
     const runIndicator = l('#run-indicator');
     const runResultStats = l('#run-result-stats');
 
@@ -21,6 +23,9 @@ l(function(){
 
     //should we save the code to local storage, next time a `tick` function will be called?
     let saveCode = false;
+    
+    //Demo instance.
+    let demo = null;
 
     //just so some css might apply after loading:
     document.body.classList.add('loaded');
@@ -75,27 +80,11 @@ l(function(){
         aceEditor.focus();
     })
 
-    //just a "demo", entering some code in to aceEditor
-    let demo = null;
+    //global keyboard shortcuts
     document.addEventListener('keydown', (event) => {
         if(event.keyCode == 13 && (event.ctrlKey || event.altKey)){    
             event.preventDefault();
             eval();
-        }
-        if(event.key == 'F7' && event.ctrlKey && typeof Demo === 'function'){
-            if(demo === null) {
-                const s = `¤s6¤
-Lorem Ipsum is simply dummy text of the printing and 
-typesetting industry. Lorem Ipsum has been the industry's 
-standard dummy text ever since the 1500s, when an unknown 
-(...)`;
-                //demo = new Demo(aceEditor, new Request('res/demo1.data.html'));
-                demo = new Demo(aceEditor, s);
-                demo.run();
-            }else if(demo !== null){
-                demo.stop();
-                demo = null;
-            }
         }
     }, true);  
 
@@ -109,7 +98,11 @@ standard dummy text ever since the 1500s, when an unknown
                 clearTimeout(evalChangedCodeTimeoutId);
                 evalChangedCodeTimeoutId = null;
             }
-            evalChangedCodeTimeoutId = setTimeout(eval,300);
+            let runIn = 300;
+            if(demo){
+                runIn = 100; 
+            }
+            evalChangedCodeTimeoutId = setTimeout(eval,runIn);
         }
         saveCode = true;        
     });
@@ -123,6 +116,7 @@ standard dummy text ever since the 1500s, when an unknown
         aceEditor.focus();
     })
 
+ 
     //'raw output' checkbox changed
     l('#raw-output-wrap').on('change',event => {
         if(event.target.checked){
@@ -131,6 +125,27 @@ standard dummy text ever since the 1500s, when an unknown
             l('#output-raw').removeClass('output-raw-wrapped');
         }
         aceEditor.focus();
+    });
+
+    
+
+    //file manager
+    const fileManager = new FileManager(aceEditor,'#fm-save-file-link');
+    l('#fm-open-file-link').on('click',()=>{
+        fileManager.startOpenFileDlg();
+    });
+
+    ////////////////////////////////
+    //menu
+    l('#main-hamburger-toggle').on('click',()=>{
+
+        if(!header.is('.hamburger-menu-on')){//it's off right now
+            header.addClass('hamburger-menu-on');
+            l(':root')[0].style.setProperty('--header-height','6em');
+        }else{//menu is on already
+            header.removeClass('hamburger-menu-on');
+            l(':root')[0].style.setProperty('--header-height','4em');
+        }
     });
 
 
@@ -166,7 +181,7 @@ standard dummy text ever since the 1500s, when an unknown
     //called every 0.5 seconds.
     let codeEditorContHeight = null;
     function tick05(){
-        //eval for some reason
+        //delayed eval
         if(doDelayedEval){
             doDelayedEval = false;
             eval();
@@ -176,8 +191,7 @@ standard dummy text ever since the 1500s, when an unknown
             //editor container size changed:
             codeEditorContHeight = curH;
             aceEditor.resize();
-        }
-        
+        }        
     }
 
     //called every 2 seconds.
@@ -214,7 +228,19 @@ standard dummy text ever since the 1500s, when an unknown
         runIndicator.text (runIndicatorText);
     }      
 
-   ///////////////////////////////
+    ///////
+    //modal dialogs.
+    l('.modal-show').on('click',(ev)=>{
+        const modalSelector = ev.currentTarget.getAttribute('data-modal');
+        l(modalSelector).addClass('modal-visible');
+    });
+
+    l('.modal .modal-btn-close, .modal .modal-btn-ok').on('click',(ev)=>{
+        l(ev.target).closest('.modal').removeClass('modal-visible');
+    })
+
+
+    ///////////////////////////////
     //the heart of everything 
 
     function eval(){
@@ -239,50 +265,78 @@ standard dummy text ever since the 1500s, when an unknown
         const outputRaw = l('#outputs #output-raw');
         const outputIframe = l('#outputs #output-iframe');
         const outputIframeEl = outputIframe[0];
+        try{
+            fetch(serviceUrl,{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                },                                
+                body: JSON.stringify({
+                    'command' : 'eval',
+                    code: codeString,
+                })   
+            })
+            .then(response => { return response.text(); })
+            .then(result => {
+                
+                runningCounter--;
+                updateRunStatus();
+                
+                try{
+                    result = JSON.parse(result);
+                }catch(error){
+                    console.log('error parsing result:', error);
+                    outputRaw.text('(Internal) Error parsing result JSON, result: ' + error);
+                };
+                outputRaw.text(result.output);
 
-        fetch(serviceUrl,{
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8",
-            },                                
-            body: JSON.stringify({
-                'command' : 'eval',
-                code: codeString,
-            })   
-        })
-        .then(response => { return response.text(); })
-        .then(result => {
-            
-            runningCounter--;
-            updateRunStatus();
-            
-            try{
-                result = JSON.parse(result);
-            }catch(error){
-                console.log('error parsing result:', error);
-                outputRaw.text('Client error, error parsing result: ' + error);
-            };
-            outputRaw.text(result.output);
+                //SO: Creating an iframe with given HTML dynamically - https://stackoverflow.com/a/10433550/4568686    
+                //eh... in chrome [Violation] Avoid using document.write() blah blah blah
 
-            //SO: Creating an iframe with given HTML dynamically - https://stackoverflow.com/a/10433550/4568686    
-            //eh... in chrome [Violation] Avoid using document.write() blah blah blah
+                /*outputIframeEl.contentWindow.document.open();
+                outputIframeEl.contentWindow.document.write(result.output);
+                outputIframeEl.contentWindow.document.close();
+                */
+                outputIframeEl.setAttribute('srcdoc', result.output);
 
-            /*outputIframeEl.contentWindow.document.open();
-            outputIframeEl.contentWindow.document.write(result.output);
-            outputIframeEl.contentWindow.document.close();
-            */
-            outputIframeEl.setAttribute('srcdoc', result.output);
-
-            //stats
-            //result.time is in seconds accurate to microseconds.
-            let runStatsText = '';
-            //runStatsText += result.length + 'B  ';
-            //runStatsText += result.lengthCharacters + ' characters, ';
-            runStatsText += Math.round(result.time * 1000 * 10) / 10 + ' ms';
-            
-            runResultStats.addClass('visible').css('opacity',1).text(runStatsText);
-            runResultStats.attr('title',result.length + ' B')
-        });
+                //stats
+                //result.time is in seconds accurate to microseconds.
+                let runStatsText = '';
+                //runStatsText += result.length + 'B  ';
+                //runStatsText += result.lengthCharacters + ' characters, ';
+                runStatsText += Math.round(result.time * 1000 * 10) / 10 + ' ms';
+                
+                runResultStats.addClass('visible').css('opacity',1).text(runStatsText);
+                runResultStats.attr('title',result.length + ' B')
+            });
+        }catch(error){
+            console.log('error while fetching:', error);
+            outputRaw.text('(Internal) Error while fetching: ' + error);            
+        }
     }      
+
+    //just a "demo", entering some code in to aceEditor to make a gif or something.
+    
+    document.addEventListener('keydown', (event) => {
+        if(event.key == 'F7' && event.ctrlKey && typeof Demo === 'function'){
+            if(demo === null) {
+                demo = new Demo(aceEditor, new Request('res/demo1.data.html' + '?random=' + Date.now()));
+                demo.setListeners({
+                    refresh: ()=>{
+                        eval();
+                    },
+                    done:()=>{
+                        demo = null;
+                    }
+                });
+                demo.run();
+            }else if(demo !== null){
+                demo.stop();
+                demo = null;
+            }
+        }
+    }, true);  
+
+    
 })
 

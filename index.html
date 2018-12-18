@@ -3,6 +3,10 @@
     <head>
         <meta charset='UTF-8'>
         <title>Tweaky</title>
+        
+        <link rel="icon" href="res/images/favicon.png" >
+
+        <link rel = 'stylesheet' type='text/css' href='res/css/normalize.css'>
         <link rel = 'stylesheet' type='text/css' href='res/css/main.css'>
 
         <script src = 'lib/lightdom.js'></script>
@@ -14,21 +18,46 @@
 
         <script src = 'app/app.js'></script>
         <script src = 'app/demo.js'></script>
-        
+        <script src = 'app/file-manager.js'></script>
 
     </head>
     <body class = 'theme-dark'>
         <header>
             <div class = 'container'>
                 <h1>
-                    <span class = 'line-main'>Tweaky</span>
-                    <a class = 'gh-link' href = 'https://github/kpion/tweaky' title = '{source code}'>
-                        <img src = 'res/images/github-white-128.png'>
-                    </a>
+                    <span class = 'line-main'>ツTweaky</span>
                     <br>
                     <span class = 'line-extra'>
                         <span>Local playground</span>
+                        <!-- <span id = 'main-hamburger-toggle'><a  href = 'javascript:;'>☰</a></span> -->
+
+                        <a class = 'icon' id = 'fm-open-file-link' href = 'javascript:;' title = 'Open (import) file'>
+                            <span>📂</span>
+                        </a> 
+                        <a class = 'icon' download id = 'fm-save-file-link' href = 'javascript:;' title = 'Download (right click to save as...)'>
+                            <span>💾</span>
+                        </a>                     
+                        <a class = 'icon modal-show' id = 'help-link'  data-modal = '#modal-help' href = 'javascript:;' title = 'Help/about'>
+                            <span>🛈</span>
+                        </a> 
+                        
+
+
+                    </span>    
                 </h1>
+
+                <!-- <div id = 'main-hamburger-menu'>
+
+                        <a class = 'icon' id = 'fm-open-file-link' href = 'javascript:;' title = 'Open (import) file'>
+                            <span>📂</span>
+                        </a> 
+                        <a class = 'icon' download id = 'fm-save-file-link' href = 'javascript:;' title = 'Download (right click to save as...)'>
+                            <span>💾</span>
+                        </a>                     
+                        <a class = 'icon modal-show' id = 'help-link'  data-modal = '#modal-help' href = 'javascript:;' title = 'Help'>
+                            <span>🛈</span>
+                        </a> 
+                </div> -->
 
 
             </div>
@@ -38,19 +67,20 @@
         <main>
             <div id = 'code' ><!-- everything related to code including toolbar and editor-->
                 <!-- <label title = 'Code, Alt+C'><b><u>C</u>ode:</b></label> -->
-                <div class = 'toolbar'>
+                <div id = 'toolbar'>
                     <button id = 'eval' class = 'button button-primary' title = 'Ctrl + Enter' accesskey = "r">
                         RUN
                     </button>
                     
-                    <label class = 'run-item' for = 'auto-eval' title = 'Auto evaluate on change, Alt+A' accesskey= "a">
+                    <label class = 'run-item' id = 'auto-eval-label' for = 'auto-eval' title = 'Auto evaluate on change, Alt+A' accesskey= "a">
                         <input type = 'checkbox' id  = 'auto-eval'><u>A</u>uto
                     </label>
+
                     <span class = 'run-item' id = 'run-result-stats'></span>
                     <span class = 'run-item' id = 'run-indicator'></span>
                     
-
                 </div>
+
                 <div id = 'editor-container'>
                     <div id = 'editor' accesskey = "c"></div> 
                 </div>
@@ -86,7 +116,47 @@
 
                     <div style = 'clear:both'></div>
                 </div>
-            </div>                
+            </div>    
+
+            
+            <div class = 'modal' id = 'modal-help'>
+                <label class = 'modal-btn-close'>✕</label>
+                <!-- <h1>Quick instructions</h1> -->
+                <div class = 'content'>
+
+                    <h2>Tweaky main keyboard shorcuts</h2>
+
+                    <div><span>Ctrl-Enter or Alt-Enter</span>Run</div>
+                    <div><span>Alt-A (or Alt-Shift-A in FX)</span>Toggle <b>a</b>uto run (live preview)</div>
+
+                    <h2>Editor keyboard shorcuts</h2>
+
+                    <div><span>Ctrl-Space</span>Autocomplete</div>
+                    <div><span>Ctrl-D</span>Remove line</div>
+                    <div><span>Alt-Shift-Down</span>Copy lines down</div>
+                    <div><span>Ctrl-/</span>Toggle comment</div>
+                    <br>
+                    <div><span>Ctrl-L</span>Go to line</div>
+                    <div><span>Ctrl-F</span>Find</div>
+                    <div><span>Ctrl-H</span>Replace</div>
+                    <div><span>Ctrl-K</span>Find next</div>
+                    <div><span>Ctrl-Shift-K</span>Find previous</div>
+                    
+                    <div>
+                        <a target = '_blank' href = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts'>More (opens in a new tab)</a>
+                    </div>
+                    
+                    <h2>About</h2>
+                    <div>
+                        <a href = 'https://github.com/kpion/tweaky'>
+                            See repo on github 
+                            <span class = 'icon'><img src = 'res/images/github-white-128.png'></span>
+                        </a>
+                    </div>
+                    <br>
+                </div>
+                <button class = 'modal-btn-ok'>OK</button>
+            </div>
         </main>
     </body>
 </html>

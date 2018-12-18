@@ -2,6 +2,9 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "/var/www/html/serious-project"
 		}
 	],
 	"settings": {

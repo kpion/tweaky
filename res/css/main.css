@@ -1,11 +1,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 :root{
-  --header-height: 4.5em;
-  
+  --header-height: 4.0em;
   --eval-toolbar-height: 2.5em;  
-
-
+  --dlg-width:500px;/* modal dialog */
   /*
   --background-color: #1C1D22;
   --color: #fff;
@@ -40,9 +38,6 @@ body {
   color:var(--color);
 	font-family: sans-serif; 
   
-  
-  
-  
 }
 
 /*
@@ -53,7 +48,7 @@ common elements
 
 .button{
   border: 0;
-  padding: .5em 1em;
+  padding: .3em 1em 0.2em 1em;
   color: rgba(0,0,0,.8);
   background-color: #E6E6E6;
   border-radius: 2px;
@@ -82,7 +77,6 @@ label{
 
 h1,h2,h3{
   font-weight: 400;
-  color: #222;
   line-height: normal;
   margin: 0.2em 0;
 }
@@ -91,7 +85,25 @@ a,a:visited{
   text-decoration: none;
   color:#2FACFF; 
 }
+a:focus{
+  border:none;
+}
 
+/* 'icon', can be text or image. Used e.g. in hamburger menu, and 'info' dlg box. This is a wrapper around text or img */
+.icon{
+  font-size:16px;
+  font-family: symbola;/* otherwise fx wihh select "Twemoji Mozilla" on ubuntu which is a bit too bold*/
+  opacity:0.8;
+}
+
+.icon img{
+  width:16px;
+  vertical-align: middle;
+}
+
+.icon:hover{
+  opacity:1;  
+}
 /*
 -------------------------------------------------------------------------------
 header
@@ -101,12 +113,14 @@ header
 header{
   display:flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
+
   text-transform: uppercase;  
   background-color:black; 
   color:white;
   padding: 0px 0 0px 0;
   height: var(--header-height); 
+  overflow:hidden;
   transition: background-image 5s;
 }
 
@@ -119,7 +133,7 @@ body.theme-dark header{
 
 /* h1 and everything wrapper */
 header .container{
-  
+  margin-top:10px;
   /* max-width: 30em; */
   /* margin: 0 auto; */
 }
@@ -129,8 +143,8 @@ header h1{
   margin-top: 0;
   position:relative;
   font-weight: 200;
-  margin-bottom: 0.825rem;
-  letter-spacing: 12px;
+  /* letter-spacing: 12px; */
+  letter-spacing: 24px;
   display: inline-block;
 }
 
@@ -172,33 +186,38 @@ body.loaded header h1 .line-extra {
   color:#ccc;
 }
 
-
-/* image logo */
-
-header .gh-link{
-  position:relative;
-  top:3px;
-  left:-200px;
-  transition:all 0.5s ease-in;
-  display:inline-block;
-  
+/* ------------- main hamburger ---------- */
+#main-hamburger-toggle{
+  /* width:1.5em; */
 }
 
-body.loaded header .gh-link{
-  opacity: 1;  
-  left:-20px; /* compensating a space */
- 
+#main-hamburger-toggle a{
+  cursor:pointer;
+  color: var(--color-2);
+  opacity:0.8;
+  transition:opacity 0.4s;
+}
+#main-hamburger-toggle a:hover{
+  opacity:1;
 }
 
-header .gh-link img{
-  width:24px;
-  opacity:0.9;  
-  display: block;
-  
+#main-hamburger-menu{
+  /* margin-top: 5px; */
+  font-size: 0.7em;
+  opacity: 0.1;
+  transition: opacity 0.5s;
 }
 
-header .gh-link img:hover{
-  opacity:1;  
+header.hamburger-menu-on #main-hamburger-menu{
+  /* display:block; */
+  opacity:0.8;
+}
+
+#main-hamburger-menu  {
+
+}
+#main-hamburger-menu  .icon{
+  margin-right:5px;
 }
 
 
@@ -233,10 +252,11 @@ editor and output panels
 } */
 
 
-#code .toolbar{
+#code #toolbar{
   height: var(--eval-toolbar-height)  ;
   margin-top:10px;
 }
+
 
 /* for #run-indicator #run-result-stats etc*/
 .run-item{
@@ -245,6 +265,10 @@ editor and output panels
   font-size:0.7em;
   color: var(--color-2);
   margin-left:2px;
+}
+
+#auto-eval-label {
+  width:5.0em;
 }
 
 #run-indicator, #run-result-stats{
@@ -256,6 +280,9 @@ editor and output panels
   opacity:1;
 }
 
+
+/* ------------- editor itself ---------- */
+
 #editor-container{
   position: relative;
   width:100%;
@@ -263,7 +290,7 @@ editor and output panels
   
   
   margin-bottom:1em;
-  resize: vertical;
+  /* resize: vertical; */
   overflow: hidden;  
   /* border: 2px solid blue; */
   border:var(--section-border);
@@ -404,3 +431,84 @@ splitjs gutters.
   cursor: row-resize;
 }    
 
+
+/*
+-------------------------------------------------------------------------------
+modal dialog
+-------------------------------------------------------------------------------
+*/
+.modal{
+  position:absolute;
+  top: 50px;
+  width: var(--dlg-width);
+  /* height: 200px; */
+  left: calc(50% - var(--dlg-width)/2);
+  padding: 10px;
+
+  border: 1px solid var(--section-border-color);
+  border-radius: 5px; 
+  /* background-color:white;  */
+  background-color: var(--background-color);
+  color:var(--color-2);
+
+  display:none;
+}
+
+.modal.modal-visible{
+  display:block;
+}
+
+.modal .modal-btn-close{
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  padding-top: 3px;
+  /* background: #fff; */
+  font-size: 16px;
+  width: 25px;
+  height: 25px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  /* color: #aaa; */
+  opacity:0.7;
+}
+
+.modal .modal-btn-close:hover { 
+  opacity:1; 
+}  
+
+.modal .modal-btn-ok {
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  min-width: 50px;
+  height: 32px;
+  padding:9px;
+
+  text-align: center;
+  cursor: pointer;
+  background: #456CB3;
+  color: #fff;
+  border-radius: 2px;
+  border: none;
+  font-size: 14px;
+  font-weight: normal;
+  box-sizing: border-box;
+}
+.modal {
+  font-size:0.9em;
+}
+.modal h1{
+    font-size:1.2em;
+}
+.modal h2{
+  font-size:1.1em;
+  font-weight:bold;
+  margin:10px 0px;
+}
+
+.modal .content span{
+  display: inline-block;
+  width:16em;
+}
