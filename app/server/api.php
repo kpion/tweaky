@@ -3,6 +3,7 @@
 $phpInput = file_get_contents('php://input');
 $post = json_decode($phpInput, true);
 
+
 $response = [
     'error' => 0,
     'time' => null,
@@ -52,8 +53,9 @@ function betterEval($code) {
     fclose ( $tmp );
     return $result;
 }
+$command = isset($post['command'])?$post['command']:null;
 
-if($post['command']??null === 'eval'){
+if($command === 'eval'){
     $code = $post['code'];
     try {
         $response = betterEval($code);
@@ -65,3 +67,4 @@ if($post['command']??null === 'eval'){
     
 }
 die(json_encode($response));
+
