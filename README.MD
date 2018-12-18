@@ -23,7 +23,7 @@ And then open your browser and visit e.g.  http://localhost/tweaky
 
  - Add more kitties to the demo, ppl love kitties.
 
- - Find some research confirming point #2. It sounds a bit silly.
+ - Find some research confirming point #3. It sounds a bit silly.
 
 ## Credits
 
