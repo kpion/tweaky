@@ -11,8 +11,3 @@ No dependencies (except of course having PHP already installed), so just downloa
 ## Credits
 
 Cat astrounaut drawing: https://www.flickr.com/photos/piedmont_fossil/16383234371
-
-
-
-
-
