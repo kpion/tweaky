@@ -3,7 +3,7 @@
 //it's like jquery document.ready.
 l(function(){
    
-    const serviceUrl = 'app/service.php';
+    const serverApiUri = 'app/server/api.php';
     const header =  l('header');
 
     const codeEditorContainter = l('#code #editor-container');
@@ -266,7 +266,7 @@ l(function(){
         const outputIframe = l('#outputs #output-iframe');
         const outputIframeEl = outputIframe[0];
         try{
-            fetch(serviceUrl,{
+            fetch(serverApiUri,{
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json; charset=utf-8",
@@ -287,7 +287,9 @@ l(function(){
                 }catch(error){
                     console.log('error parsing result:', error);
                     outputRaw.text('(Internal) Error parsing result JSON, result: ' + error);
+                    result = {output:'Internal Tweaky\'s error'};
                 };
+                console.log('result\'s dbg:',result.dbg);
                 outputRaw.text(result.output);
 
                 //SO: Creating an iframe with given HTML dynamically - https://stackoverflow.com/a/10433550/4568686    

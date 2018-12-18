@@ -34,19 +34,21 @@ function betterEval($code) {
     $tmpMeta = stream_get_meta_data ( $tmp );
     $uri = $tmpMeta ['uri'];
     fwrite ( $tmp, $code );
-
+    
     ob_start();
     $start = microtime(true);
     //anonymously, so our scope will not be polluted (very optimistic here, ofc)
     call_user_func(function() use ($uri) {
         include ($uri);
     });    
-
+    
     $result['time'] = microtime(true) - $start;
     $result['output'] = ob_get_clean();    
     $result['length'] = strlen($result['output']);
     $result['lengthCharacters'] = mb_strlen($result['output']);
-    
+    $result['dbg'] = [
+        'fileUri' => $uri
+    ];
     fclose ( $tmp );
     return $result;
 }
